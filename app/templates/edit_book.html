@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Book - Smart Library</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<header>
+    <div class="logo">Smart<span>Library</span></div>
+    <nav>
+        <a href="/">Home</a>
+        <a href="/admin">Dashboard</a>
+    </nav>
+</header>
+
+<main class="books-section">
+    <div class="admin-add-book">
+        <h1>Edit Book</h1>
+
+        <form action="/admin/edit-book/{{ book.Book_ID }}" method="POST">
+
+            <input
+                type="text"
+                name="title"
+                value="{{ book.Title }}"
+                placeholder="Book Title"
+                required
+            >
+
+            <input
+                type="text"
+                name="author"
+                value="{{ book.Author or '' }}"
+                placeholder="Author"
+            >
+
+            <input
+                type="text"
+                name="category"
+                value="{{ book.Category or '' }}"
+                placeholder="Category"
+            >
+
+            <textarea
+                name="description"
+                placeholder="Description"
+            >{{ book.Description or '' }}</textarea>
+
+            <input
+                type="number"
+                name="copies"
+                value="{{ book.Available_Copies }}"
+                min="0"
+                required
+            >
+
+            <button type="submit">Save Changes</button>
+        </form>
+    </div>
+</main>
+
+</body>
+</html>

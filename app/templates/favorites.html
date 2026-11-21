@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>My Favorites</title>
+
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}"
+    />
+  </head>
+
+  <body>
+    <header>
+      <div class="logo">Smart<span>Library</span></div>
+
+      <nav>
+        <a href="/">Home</a>
+        <a href="/favorites">Favorites ❤️</a>
+      </nav>
+    </header>
+
+    <section class="books-section">
+      <h2>My Favorite Books ❤️</h2>
+      <p class="subtitle">Your saved books collection</p>
+
+      <div class="books-container">
+        {% if books %} {% for book in books %}
+
+        <div class="book-card">
+          <div class="book-icon">📚</div>
+
+          <h3>{{ book.Title }}</h3>
+
+          <p>Author: {{ book.Author }}</p>
+
+          <p>Category: {{ book.Category }}</p>
+
+          <div class="availability">
+            Available Copies: {{ book.Available_Copies }}
+          </div>
+
+          <a
+            href="{{ url_for('book_details', book_id=book.Book_ID) }}"
+            class="recommend-btn"
+          >
+            View Details
+          </a>
+          <form
+            action="{{ url_for('remove_favorite', book_id=book.Book_ID) }}"
+            method="POST"
+          >
+            <button type="submit" class="remove-btn">
+              Remove from Favorites
+            </button>
+          </form>
+        </div>
+
+        {% endfor %} {% else %}
+
+        <p>No favorite books yet.</p>
+
+        {% endif %}
+      </div>
+
+      <a href="/" class="back-btn">← Back to Library</a>
+    </section>
+  </body>
+</html>

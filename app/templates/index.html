@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Smart AI Library</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}"
+    />
+  </head>
+  <body>
+    <header>
+      <div class="logo">Smart<span>Library</span></div>
+
+      <div class="header-right">
+        <nav class="main-nav">
+          <a href="/">Home</a>
+          <a href="#books">Books</a>
+          <a href="/favorites">Favorites</a>
+          <a href="/my-borrowings">My Borrowings</a>
+          <a href="/assistant">AI Assistant</a>
+          <a href="#about">About</a>
+          {% if session.get("is_admin") %}
+          <a href="/admin">Admin Dashboard</a>
+          {% endif %}
+        </nav>
+
+        <div class="account-card">
+          {% if session.get("student_id") %}
+
+          <div class="account-info">
+            <span class="account-avatar">👤</span>
+
+            <div class="account-text">
+              <small>Welcome back</small>
+              <strong>{{ session.get("student_name") }}</strong>
+            </div>
+          </div>
+
+          <form action="/logout" method="POST">
+            <button type="submit" class="account-logout">Logout</button>
+          </form>
+
+          {% else %}
+
+          <a href="/login" class="account-login">Login</a>
+
+          <a href="/register" class="account-register"> Create Account </a>
+
+          {% endif %}
+        </div>
+      </div>
+    </header>
+
+    <section class="hero">
+      <h1>Discover Your Next Favorite Book</h1>
+      <p>Explore books and find your next learning journey with AI.</p>
+
+      <a href="#books" class="hero-btn">Explore Books</a>
+    </section>
+
+    <section class="books-section" id="books">
+      <h2>Our Library Books</h2>
+      <p class="subtitle">Explore our available collection</p>
+
+      <form action="/" method="GET" class="search-form">
+        <input
+          type="text"
+          name="search"
+          placeholder="Search by book, author or category..."
+          value="{{ search }}"
+        />
+
+        <button type="submit">Search</button>
+      </form>
+
+      <div class="books-container">
+        {% if books %} {% for book in books %}
+
+        <div class="book-card">
+          <div class="book-icon">📚</div>
+
+          <a
+            href="{{ url_for('book_details', book_id=book.Book_ID) }}"
+            class="book-title-link"
+          >
+            <h3>{{ book.Title }}</h3>
+          </a>
+
+          <p>Author: {{ book.Author }}</p>
+
+          <p>Category: {{ book.Category }}</p>
+
+          <div class="availability">
+            Available Copies: {{ book.Available_Copies }}
+          </div>
+
+       
+          <a
+            href="{{ url_for('recommendations', book_id=book.Book_ID) }}"
+            class="recommend-btn"
+          >
+            Get Recommendations
+          </a>
+          <a
+            href="{{ url_for('book_details', book_id=book.Book_ID) }}"
+            class="borrow-btn"
+          >
+            Borrow Book
+          </a>
+        </div>
+
+        {% endfor %} {% else %}
+        <p>No books found.</p>
+        {% endif %}
+      </div>
+    </section>
+
+    <footer id="about">
+      <h3>Smart AI Library</h3>
+      <p>Your intelligent gateway to knowledge.</p>
+    </footer>
+  </body>
+</html>

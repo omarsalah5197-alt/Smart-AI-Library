@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Smart Library</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="auth-page">
+
+    <header class="auth-header">
+        <div class="logo">Smart<span>Library</span></div>
+        <a href="/" class="back-home">Back to Home</a>
+    </header>
+
+    <main class="auth-container">
+
+        <div class="auth-card">
+
+            <div class="auth-icon">📚</div>
+
+            <h1>Welcome Back!</h1>
+
+            <p class="auth-subtitle">
+                Login to continue your reading journey.
+            </p>
+
+            {% if message %}
+                <p class="error-message">{{ message }}</p>
+            {% endif %}
+
+            <form action="/login" method="POST">
+
+                <label>Email Address</label>
+                <input
+                    type="email"
+                    name="email"
+                    placeholder="Enter your email"
+                    required
+                >
+
+                <label>Password</label>
+                <input
+                    type="password"
+                    name="password"
+                    placeholder="Enter your password"
+                    required
+                >
+
+                <button type="submit" class="auth-submit">
+                    Login to Account
+                </button>
+
+            </form>
+
+            <p class="auth-switch">
+                Don't have an account?
+                <a href="/register">Create Account</a>
+            </p>
+
+        </div>
+
+    </main>
+
+</body>
+</html>

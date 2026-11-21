@@ -1,0 +1,182 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Smart Library Assistant</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+    <div class="assistant-container">
+
+        <div class="assistant-header">
+            <div>
+                <h1>Smart Library Assistant</h1>
+                <p>Your intelligent library companion</p>
+            </div>
+
+            <a href="/" class="back-btn">Back to Home</a>
+        </div>
+
+        <div class="assistant-chat">
+
+            <div class="bot-message">
+                <strong>AI Assistant</strong>
+                <p>
+                    Hello {{ session.get('student_name', 'Student') }}!
+                    How can I help you today?
+                </p>
+            </div>
+
+            {% if answer %}
+
+                <div class="user-message">
+                    <strong>You</strong>
+                    <p>{{ query }}</p>
+                </div>
+
+                <div class="bot-message">
+                    <strong>AI Assistant</strong>
+                    <p>{{ answer.message }}</p>
+                </div>
+
+                {% if answer.books %}
+
+                    <div class="assistant-results">
+
+                        {% if answer.intent == "borrowing_status" %}
+
+                            {% for item in answer.books %}
+
+                                <div class="assistant-book">
+                                    <h3>{{ item.Book_Title }}</h3>
+
+                                    <p>Status: {{ item.Status }}</p>
+                                    <p>Borrow Date: {{ item.Borrow_Date }}</p>
+                                    <p>Due Date: {{ item.Due_Date }}</p>
+
+                                </div>
+
+                            {% endfor %}
+
+                        {% else %}
+
+                            {% for book in answer.books %}
+
+                                <div class="assistant-book">
+
+                                    <h3>{{ book.Title }}</h3>
+
+                                    <p>Author: {{ book.Author }}</p>
+                                    <p>Category: {{ book.Category }}</p>
+                                    <p>
+                                        Available Copies:
+                                        {{ book.Available_Copies }}
+                                    </p>
+
+                                    <a href="/book/{{ book.Book_ID }}">
+                                        View Book
+                                    </a>
+
+                                </div>
+
+                            {% endfor %}
+
+                        {% endif %}
+
+                    </div>
+
+                {% endif %}
+
+            {% endif %}
+
+        </div>
+
+        <form method="POST" class="assistant-form">
+
+            <input
+                type="text"
+                id="assistant-input"
+                name="query"
+                placeholder="Ask me anything about the library..."
+                required
+                autocomplete="off"
+            >
+
+            <button type="submit">Send</button>
+
+        </form>
+
+        <div class="assistant-suggestions">
+    <p>Try asking:</p>
+
+    <button type="button" class="suggestion-chip"
+        onclick="fillQuestion(this)">
+        Find books about Python
+    </button>
+
+    <button type="button" class="suggestion-chip"
+        onclick="fillQuestion(this)">
+        Recommend me books about AI
+    </button>
+
+    <button type="button" class="suggestion-chip"
+        onclick="fillQuestion(this)">
+        Show available books
+    </button>
+
+    <button type="button" class="suggestion-chip"
+        onclick="fillQuestion(this)">
+        My borrowings
+    </button>
+</div>
+
+    </div>
+<script>
+    function fillQuestion(button) {
+
+        const input = document.getElementById("assistant-input");
+
+        input.value = button.textContent.trim();
+
+        input.focus();
+    }
+</script>
+<section class="chat-history">
+    <h2>Previous Conversations</h2>
+
+    {% if history %}
+        {% for chat in history %}
+            <div class="history-card">
+
+                <div class="history-question">
+                    <strong>You:</strong>
+                    <p>{{ chat.User_Message }}</p>
+                </div>
+
+                <div class="history-answer">
+                    <strong>Assistant:</strong>
+                    <p>{{ chat.Assistant_Response }}</p>
+                </div>
+
+                <small>
+                    {{ chat.Created_At }}
+                </small>
+
+            </div>
+        {% endfor %}
+    {% else %}
+        <p class="empty-history">
+            No previous conversations yet.
+        </p>
+    {% endif %}
+</section>
+</body>
+</html>

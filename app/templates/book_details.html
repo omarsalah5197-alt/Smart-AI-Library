@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Book Details</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+<header>
+    <div class="logo">Smart<span>Library</span></div>
+
+    <nav>
+        <a href="/">Home</a>
+        <a href="/#books">Books</a>
+    </nav>
+</header>
+
+{% if book %}
+
+<div class="book-details-layout">
+
+    <!-- Book Details -->
+    <section class="books-section book-details-section">
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% for category, message in messages %}
+                <div class="flash-message {{ category }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endwith %}
+
+        <div class="book-card">
+
+            <div class="book-icon">📖</div>
+
+            <h2>{{ book.Title }}</h2>
+
+            <p><strong>Author:</strong> {{ book.Author }}</p>
+
+            <p><strong>Category:</strong> {{ book.Category }}</p>
+
+            <p><strong>Description:</strong></p>
+
+            <p>{{ book.Description }}</p>
+
+            <div class="availability">
+                Available Copies: {{ book.Available_Copies }}
+            </div>
+
+            <a href="{{ url_for('recommendations', book_id=book.Book_ID) }}"
+               class="recommend-btn">
+                Get Recommendations
+            </a>
+
+            <form action="{{ url_for('add_favorite', book_id=book.Book_ID) }}"
+                  method="POST">
+
+                <button type="submit" class="favorite-btn">
+                    ❤️ Add to Favorites
+                </button>
+
+            </form>
+
+        </div>
+
+    </section>
+
+
+    <!-- Borrow Section -->
+    <section class="borrow-section">
+
+        {% if session.get("student_id") %}
+
+            {% if book.Available_Copies > 0 %}
+
+                <form action="{{ url_for('borrow_book', book_id=book.Book_ID) }}"
+                      method="POST"
+                      class="borrow-form">
+
+                    <div class="borrow-icon">📚</div>
+
+                    <h2>Borrow This Book</h2>
+
+                    <p class="borrow-subtitle">
+                        Choose your borrowing period
+                    </p>
+
+                    <div class="duration-options">
+
+                        <label class="duration-card">
+                            <input type="radio" name="days" value="7" checked>
+                            <span class="duration-number">7</span>
+                            <span class="duration-label">Days</span>
+                        </label>
+
+                        <label class="duration-card">
+                            <input type="radio" name="days" value="14">
+                            <span class="duration-number">14</span>
+                            <span class="duration-label">Days</span>
+                        </label>
+
+                        <label class="duration-card">
+                            <input type="radio" name="days" value="21">
+                            <span class="duration-number">21</span>
+                            <span class="duration-label">Days</span>
+                        </label>
+
+                    </div>
+
+                    <button type="submit" class="confirm-borrow-btn">
+                        Confirm Borrowing
+                    </button>
+
+                </form>
+
+            {% else %}
+
+                <div class="borrow-form">
+                    <p class="unavailable">
+                        This book is currently unavailable.
+                    </p>
+                </div>
+
+            {% endif %}
+
+        {% else %}
+
+            <div class="borrow-form">
+
+                <h2>Borrow This Book</h2>
+
+                <p class="borrow-subtitle">
+                    Please login to borrow this book.
+                </p>
+
+                <a href="/login" class="borrow-button">
+                    Login
+                </a>
+
+            </div>
+
+        {% endif %}
+
+    </section>
+
+</div>
+
+{% else %}
+
+<section class="books-section">
+    <div class="book-card">
+        <h2>Book Not Found</h2>
+        <a href="/" class="back-btn">← Back to Library</a>
+    </div>
+</section>
+
+{% endif %}
+
+</body>
+</html>

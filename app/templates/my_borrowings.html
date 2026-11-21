@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>My Borrowings - Smart Library</title>
+
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}"
+    />
+  </head>
+
+  <body>
+    <header>
+      <div class="logo">Smart<span>Library</span></div>
+
+      <nav>
+        <a href="/">Home</a>
+        <a href="/favorites">Favorites</a>
+        <a href="/my-borrowings">My Borrowings</a>
+      </nav>
+    </header>
+
+    <main class="borrowings-container">
+      <h1>My Borrowings</h1>
+
+      <p class="borrowings-subtitle">
+        Track your borrowed books and return dates.
+      </p>
+
+      {% if borrowings %}
+
+      <div class="borrowings-grid">
+        {% for borrowing in borrowings %}
+
+        <div class="borrowing-card">
+          <h2>{{ borrowing.Title }}</h2>
+
+          <p>
+            <strong>Author:</strong>
+            {{ borrowing.Author }}
+          </p>
+
+          <p>
+            <strong>Borrow Date:</strong>
+            {{ borrowing.Borrow_Date }}
+          </p>
+
+          <p>
+            <strong>Due Date:</strong>
+            {{ borrowing.Due_Date }}
+          </p>
+
+          <p>
+            <strong>Status:</strong>
+            {{ borrowing.Status }}
+          </p>
+          {% if borrowing.Status == 'Borrowed' %}
+
+          <form
+            action="{{ url_for('return_book', borrowing_id=borrowing.Borrowing_ID) }}"
+            method="POST"
+          >
+            <button type="submit" class="return-button">Return Book</button>
+          </form>
+
+          {% elif borrowing.Status == 'Returned' %}
+
+          <p class="returned-message">Book Returned Successfully</p>
+
+          {% endif %}
+        </div>
+
+        {% endfor %}
+      </div>
+
+      {% else %}
+
+      <div class="empty-borrowings">
+        <h2>No Borrowings Yet</h2>
+        <p>You haven't borrowed any books yet.</p>
+        <a href="/" class="auth-submit"> Explore Books </a>
+      </div>
+
+      {% endif %}
+    </main>
+  </body>
+</html>

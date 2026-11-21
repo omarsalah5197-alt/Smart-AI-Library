@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Manage Borrowings</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+<header>
+    <div class="logo">Smart<span>Library</span></div>
+
+    <nav>
+        <a href="/">Home</a>
+        <a href="/admin">Dashboard</a>
+        <a href="/admin/borrowings">Borrowings</a>
+    </nav>
+</header>
+
+<section class="admin-borrowings-section">
+
+    <div class="admin-borrowings-header">
+        <h1>Borrowings Management</h1>
+        <p>Manage and monitor all library borrowing records.</p>
+    </div>
+
+    <div class="borrowings-stats">
+        <div class="borrowing-stat-card">
+            <h3>{{ borrowings|length }}</h3>
+            <p>Total Borrowings</p>
+        </div>
+
+        <div class="borrowing-stat-card">
+            <h3>
+                {{ borrowings|selectattr("Status", "equalto", "Borrowed")|list|length }}
+            </h3>
+            <p>Currently Borrowed</p>
+        </div>
+
+        <div class="borrowing-stat-card">
+            <h3>
+                {{ borrowings|selectattr("Status", "equalto", "Returned")|list|length }}
+            </h3>
+            <p>Returned Books</p>
+        </div>
+    </div>
+
+    <div class="borrowings-table-container">
+
+        <h2>All Borrowing Records</h2>
+
+        {% if borrowings %}
+
+        <table class="borrowings-table">
+
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Member</th>
+                    <th>Book</th>
+                    <th>Borrow Date</th>
+                    <th>Due Date</th>
+                    <th>Return Date</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                {% for borrowing in borrowings %}
+
+                <tr>
+                    <td>{{ borrowing.Borrowing_ID }}</td>
+
+                    <td>{{ borrowing.Student_Name }}</td>
+
+                    <td>{{ borrowing.Book_Title }}</td>
+
+                    <td>{{ borrowing.Borrow_Date }}</td>
+
+                    <td>{{ borrowing.Due_Date }}</td>
+
+                    <td>
+                        {{ borrowing.Return_Date or "Not Returned" }}
+                    </td>
+
+                    <td>
+                        {% if borrowing.Status == "Borrowed" %}
+                            <span class="status-borrowed">Borrowed</span>
+                        {% else %}
+                            <span class="status-returned">Returned</span>
+                        {% endif %}
+                    </td>
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+        {% else %}
+
+        <div class="empty-borrowings">
+            <h3>No Borrowing Records</h3>
+            <p>There are no borrowing records yet.</p>
+        </div>
+
+        {% endif %}
+
+    </div>
+
+</section>
+
+</body>
+</html>

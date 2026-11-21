@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Account - Smart Library</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body class="auth-page">
+
+    <header class="auth-header">
+        <div class="logo">Smart<span>Library</span></div>
+        <a href="/" class="back-home">Back to Home</a>
+    </header>
+
+    <main class="auth-container">
+
+        <div class="auth-card">
+
+            <div class="auth-icon">📚</div>
+
+            <h1>Create Account</h1>
+
+            <p class="auth-subtitle">
+                Join Smart AI Library and discover your next favorite book.
+            </p>
+
+            {% if message %}
+                <p class="error-message">{{ message }}</p>
+            {% endif %}
+
+            <form action="/register" method="POST">
+
+                <label>Full Name</label>
+                <input
+                    type="text"
+                    name="name"
+                    placeholder="Enter your full name"
+                    required
+                >
+
+                <label>Email Address</label>
+                <input
+                    type="email"
+                    name="email"
+                    placeholder="Enter your email"
+                    required
+                >
+
+                <label>Password</label>
+                <input
+                    type="password"
+                    name="password"
+                    placeholder="Create a password"
+                    required
+                >
+
+                <button type="submit" class="auth-submit">
+                    Create My Account
+                </button>
+
+            </form>
+
+            <p class="auth-switch">
+                Already have an account?
+                <a href="/login">Login</a>
+            </p>
+
+        </div>
+
+    </main>
+
+</body>
+</html>
